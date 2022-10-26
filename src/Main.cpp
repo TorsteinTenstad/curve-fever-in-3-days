@@ -1,4 +1,7 @@
 #include "Platform/Platform.hpp"
+#include "globals.h"
+#include "player.h"
+#include "timer.hpp"
 
 int main()
 {
@@ -7,13 +10,15 @@ int main()
 	// in Windows at least, this must be called before creating the window
 	float screenScalingFactor = platform.getScreenScalingFactor(window.getSystemHandle());
 	// Use the screenScalingFactor
-	window.create(sf::VideoMode(1920 * screenScalingFactor, 1080 * screenScalingFactor), "outcast-particle");
+	window.create(sf::VideoMode(SCREEN_X * screenScalingFactor, SCREEN_Y * screenScalingFactor), "outcast-particle");
 	platform.setIcon(window.getSystemHandle());
 
-	sf::CircleShape shape = sf::CircleShape(100);
-	shape.setFillColor(sf::Color::White);
+	Player player1 = Player(sf::Keyboard::A, sf::Keyboard::D, sf::Color(25, 98, 158));
+	Player player2 = Player(sf::Keyboard::Left, sf::Keyboard::Right, sf::Color(126, 199, 54));
+	Timer timer = Timer();
 
 	sf::Event event;
+	float dt;
 
 	while (window.isOpen())
 	{
@@ -30,10 +35,22 @@ int main()
 				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 				window.setView(sf::View(visibleArea));
 			}
-		}
 
-		window.clear();
-		window.draw(shape);
+			if (event.type == sf::Event::KeyPressed)
+			{
+				player1.OnKey(true, event.key.code);
+				player2.OnKey(true, event.key.code);
+			}
+			if (event.type == sf::Event::KeyReleased)
+			{
+				player1.OnKey(false, event.key.code);
+				player2.OnKey(false, event.key.code);
+			}
+		}
+		//window.clear();
+		dt = timer.GetElapsedSeconds();
+		player1.Update(window, dt);
+		player2.Update(window, dt);
 		window.display();
 	}
 	return 0;
