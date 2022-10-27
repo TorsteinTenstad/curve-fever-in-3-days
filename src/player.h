@@ -13,7 +13,7 @@ private:
 	int left_key_;
 	int right_key_;
 
-	float linear_speed_ = 300;
+	float linear_speed_ = 100; //300;
 	float angular_speed_ = 3;
 	float r_ = 10;
 
@@ -21,7 +21,7 @@ private:
 	bool turning_right_ = false;
 	bool drawing_ = true;
 
-	float jumping_for_ = 0.5;
+	float jumping_for_ = 3 * 0.3;
 	float next_jump_time_ = 5;
 	bool jumping_ = false;
 
@@ -56,22 +56,23 @@ public:
 			jumping_ = next_jump_time_ < t && t < (next_jump_time_ + jumping_for_);
 			if (jumping_)
 			{
-				sf::CircleShape black_dot = sf::CircleShape(1.25 * r_);
-				black_dot.setPosition(position_);
-				black_dot.setOrigin(sf::Vector2f(1.25 * r_, 1.25 * r_));
-				black_dot.setFillColor(sf::Color::Black);
-				window.draw(black_dot);
+				sf::Color dot_color;
+				float dot_r;
+				if (next_jump_time_ + (2 * r_ / linear_speed_) < t)
+				{
+					dot_color = sf::Color::Black;
+					dot_r = 1.1 * r_;
+					sf::CircleShape dot = sf::CircleShape(dot_r);
+					dot.setPosition(position_);
+					dot.setOrigin(sf::Vector2f(dot_r, dot_r));
+					dot.setFillColor(dot_color);
+					window.draw(dot);
+				}
 			}
 
 			if (was_jumping && !jumping_)
 			{
-				next_jump_time_ = t + 1 + 2 * ((float)rand() / RAND_MAX);
-				window.draw(jump_filler_sprite_);
-			}
-
-			if (!was_jumping && jumping_)
-			{
-				jump_filler_sprite_ = shape_;
+				next_jump_time_ = t + 1 + 3 * ((float)rand() / RAND_MAX);
 			}
 
 			if (turning_right_)
