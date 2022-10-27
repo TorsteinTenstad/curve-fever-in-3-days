@@ -1,4 +1,5 @@
 #include "Platform/Platform.hpp"
+#include "collision_handler.hpp"
 #include "globals.h"
 #include "player.h"
 #include "timer.hpp"
@@ -10,16 +11,18 @@ int main()
 	// in Windows at least, this must be called before creating the window
 	float screenScalingFactor = platform.getScreenScalingFactor(window.getSystemHandle());
 	// Use the screenScalingFactor
-	window.create(sf::VideoMode(SCREEN_X * screenScalingFactor, SCREEN_Y * screenScalingFactor), "outcast-particle");
+	window.create(sf::VideoMode(SCREEN_X * screenScalingFactor, SCREEN_Y * screenScalingFactor), "Curve :)", sf::Style::Fullscreen);
 	platform.setIcon(window.getSystemHandle());
 
-	Player player1 = Player(sf::Keyboard::A, sf::Keyboard::D, sf::Color(25, 98, 158));
-	Player player2 = Player(sf::Keyboard::Left, sf::Keyboard::Right, sf::Color(126, 199, 54));
-	Timer timer = Timer();
+	CollisionHandler collision_handler = CollisionHandler();
+	Player player1 = Player(1, sf::Keyboard::A, sf::Keyboard::D, sf::Color(25, 98, 158), &collision_handler);
+	Player player2 = Player(2, sf::Keyboard::Left, sf::Keyboard::Right, sf::Color(126, 199, 54), &collision_handler);
 
 	sf::Event event;
 	float dt;
+	float t;
 
+	Timer timer = Timer();
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
@@ -47,10 +50,14 @@ int main()
 				player2.OnKey(false, event.key.code);
 			}
 		}
-		//window.clear();
+		if (timer.GetSecondsSinceInit() < GRACE_PERIOD)
+		{
+			window.clear();
+		}
 		dt = timer.GetElapsedSeconds();
-		player1.Update(window, dt);
-		player2.Update(window, dt);
+		t = timer.GetSecondsSinceInit();
+		player1.Update(window, dt, t);
+		player2.Update(window, dt, t);
 		window.display();
 	}
 	return 0;
