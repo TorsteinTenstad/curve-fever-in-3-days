@@ -28,7 +28,8 @@
 		".clang-format": "yaml",
 		"iostream": "cpp",
 		"xiosbase": "cpp",
-		"chrono": "cpp"
+		"chrono": "cpp",
+		"fstream": "cpp"
 	},
 	"terminal.integrated.defaultProfile.windows": "Git Bash",
 	"terminal.integrated.env.windows": {

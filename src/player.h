@@ -10,21 +10,23 @@ private:
 	sf::Vector2f position_;
 	float angle_;
 
+	float linear_speed_;
+	float angular_speed_;
+	float r_;
+
+	float min_time_between_jumps_;
+	float max_time_between_jumps_;
+	float jump_duration_;
+
 	int left_key_;
 	int right_key_;
 
-	float linear_speed_ = 100; //300;
-	float angular_speed_ = 3;
-	float r_ = 10;
+	float next_jump_time_ = 5;
+	bool jumping_ = false;
 
 	bool turning_left_ = false;
 	bool turning_right_ = false;
 	bool drawing_ = true;
-
-	float jumping_for_ = 3 * 0.3;
-	float next_jump_time_ = 5;
-	bool jumping_ = false;
-
 	bool dead_ = false;
 
 	sf::CircleShape shape_;
@@ -34,9 +36,16 @@ private:
 	CollisionHandler* collision_handler_;
 
 public:
-	Player(sf::RenderWindow& window, int id, int left_key, int right_key, sf::Color color, CollisionHandler* collision_handler)
+	Player(sf::RenderWindow& window, int id, float linear_speed, float angular_speed, float r, float min_time_between_jumps, float max_time_between_jumps, float jump_duration, int left_key, int right_key, sf::Color color, CollisionHandler* collision_handler)
 	{
+
+		linear_speed_ = linear_speed;
+		angular_speed_ = angular_speed;
+		r_ = r;
 		id_ = id;
+		min_time_between_jumps_ = min_time_between_jumps;
+		min_time_between_jumps_ = max_time_between_jumps;
+		jump_duration_ = jump_duration;
 		left_key_ = left_key;
 		right_key_ = right_key;
 		collision_handler_ = collision_handler;
@@ -53,15 +62,15 @@ public:
 		if (!dead_)
 		{
 			bool was_jumping = jumping_;
-			jumping_ = next_jump_time_ < t && t < (next_jump_time_ + jumping_for_);
+			jumping_ = next_jump_time_ < t && t < (next_jump_time_ + jump_duration_);
 			if (jumping_)
 			{
 				sf::Color dot_color;
 				float dot_r;
-				if (next_jump_time_ + (2 * r_ / linear_speed_) < t)
+				if (next_jump_time_ + (2 * (1+r_) / linear_speed_) < t)
 				{
 					dot_color = sf::Color::Black;
-					dot_r = 1.1 * r_;
+					dot_r = (1+r_);
 					sf::CircleShape dot = sf::CircleShape(dot_r);
 					dot.setPosition(position_);
 					dot.setOrigin(sf::Vector2f(dot_r, dot_r));
@@ -72,7 +81,7 @@ public:
 
 			if (was_jumping && !jumping_)
 			{
-				next_jump_time_ = t + 1 + 3 * ((float)rand() / RAND_MAX);
+				next_jump_time_ = t + min_time_between_jumps_ + (max_time_between_jumps_ - min_time_between_jumps_) * ((float)rand() / RAND_MAX);
 			}
 
 			if (turning_right_)

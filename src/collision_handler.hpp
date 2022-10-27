@@ -33,11 +33,13 @@ public:
 				{
 					if (timestamps_[i] < max_timestamp)
 					{
+						std::cout << "Player " << ids_[i] << " died" << std::endl;
 						return true;
 					}
 				}
 				else
 				{
+					std::cout << "Player " << ids_[i] << " died" << std::endl;
 					return true;
 				}
 			}

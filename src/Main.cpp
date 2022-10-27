@@ -15,8 +15,17 @@ int main()
 	platform.setIcon(window.getSystemHandle());
 
 	CollisionHandler collision_handler = CollisionHandler();
-	Player player1 = Player(window, 1, sf::Keyboard::A, sf::Keyboard::D, sf::Color(25, 98, 158), &collision_handler);
-	//Player player2 = Player(window, 2, sf::Keyboard::Left, sf::Keyboard::Right, sf::Color(126, 199, 54), &collision_handler);
+	std::vector<Player> players;
+
+	float linear_speed = 200;		  //px/s
+	float angular_speed = 3;		  //rad/s
+	float r = 3;					  //px
+	float min_time_between_jumps = 1; //s
+	float max_time_between_jumps = 5; //s
+	float jump_duration = 0.3;		  //s
+
+	players.push_back(Player(window, 1, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::A, sf::Keyboard::D, sf::Color(25, 98, 158), &collision_handler));
+	players.push_back(Player(window, 2, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::Left, sf::Keyboard::Right, sf::Color(126, 199, 54), &collision_handler));
 
 	sf::Event event;
 	float dt;
@@ -39,15 +48,16 @@ int main()
 				window.setView(sf::View(visibleArea));
 			}
 
-			if (event.type == sf::Event::KeyPressed)
+			for (auto& player : players)
 			{
-				player1.OnKey(true, event.key.code);
-				//player2.OnKey(true, event.key.code);
-			}
-			if (event.type == sf::Event::KeyReleased)
-			{
-				player1.OnKey(false, event.key.code);
-				//player2.OnKey(false, event.key.code);
+				if (event.type == sf::Event::KeyPressed)
+				{
+					player.OnKey(true, event.key.code);
+				}
+				if (event.type == sf::Event::KeyReleased)
+				{
+					player.OnKey(false, event.key.code);
+				}
 			}
 		}
 		if (timer.GetSecondsSinceInit() < GRACE_PERIOD)
@@ -56,8 +66,10 @@ int main()
 		}
 		dt = timer.GetElapsedSeconds();
 		t = timer.GetSecondsSinceInit();
-		player1.Update(window, dt, t);
-		//player2.Update(window, dt, t);
+		for (auto& player : players)
+		{
+			player.Update(window, dt, t);
+		}
 		window.display();
 	}
 	return 0;
