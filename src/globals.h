@@ -1,4 +1,2 @@
-#define SCREEN_X 1920
-#define SCREEN_Y 1080
 #define PI 3.14159265
 #define GRACE_PERIOD 3

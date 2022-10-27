@@ -19,9 +19,9 @@ public:
 		ids_.push_back(id);
 	}
 
-	bool HasCollided(sf::Vector2f point, float r, float max_timestamp, int id)
+	bool HasCollided(sf::RenderWindow& window, sf::Vector2f point, float r, float max_timestamp, int id)
 	{
-		if ((point.x - r) < 0 || (point.y - r) < 0 || (point.x + r) > SCREEN_X || (point.y + r) > SCREEN_Y)
+		if ((point.x - r) < 0 || (point.y - r) < 0 || (point.x + r) > window.getSize().x || (point.y + r) > window.getSize().y)
 		{
 			return true;
 		}
