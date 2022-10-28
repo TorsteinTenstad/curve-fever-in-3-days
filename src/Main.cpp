@@ -1,4 +1,5 @@
 #include "Platform/Platform.hpp"
+#include "bar.h"
 #include "collision_handler.hpp"
 #include "globals.h"
 #include "player.h"
@@ -17,15 +18,20 @@ int main()
 	CollisionHandler collision_handler = CollisionHandler();
 	std::vector<Player> players;
 
+	Bar bar1 = Bar(1920 / 4, 50, 0, 0, PURPLE_ACCENT, PURPLE);
+	Bar bar2 = Bar(1920 / 4, 50, 1920 / 4, 0, CYAN_ACCENT, CYAN);
+	Bar bar3 = Bar(1920 / 4, 50, 1920 / 2, 0, YELLOW_ACCENT, YELLOW);
+	Bar bar4 = Bar(1920 / 4, 50, 3 * 1920 / 4, 0, GREEN_ACCENT, GREEN);
+
 	float linear_speed = 200;		  //px/s
 	float angular_speed = 3;		  //rad/s
-	float r = 3;					  //px
+	float r = 10;					  //px
 	float min_time_between_jumps = 1; //s
 	float max_time_between_jumps = 5; //s
 	float jump_duration = 0.3;		  //s
 
-	players.push_back(Player(window, 1, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::A, sf::Keyboard::D, sf::Color(25, 98, 158), &collision_handler));
-	players.push_back(Player(window, 2, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::Left, sf::Keyboard::Right, sf::Color(126, 199, 54), &collision_handler));
+	players.push_back(Player(window, &bar1, 1, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::W, sf::Keyboard::S, PURPLE, &collision_handler));
+	players.push_back(Player(window, &bar2, 2, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::Left, sf::Keyboard::Right, sf::Keyboard::Up, sf::Keyboard::Down, CYAN, &collision_handler));
 
 	sf::Event event;
 	float dt;
