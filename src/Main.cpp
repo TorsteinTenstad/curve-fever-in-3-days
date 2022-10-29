@@ -12,7 +12,7 @@ int main()
 	// in Windows at least, this must be called before creating the window
 	float screenScalingFactor = platform.getScreenScalingFactor(window.getSystemHandle());
 	// Use the screenScalingFactor
-	window.create(sf::VideoMode(window.getSize().x * screenScalingFactor, window.getSize().y * screenScalingFactor), "Curve :)", sf::Style::Fullscreen);
+	window.create(sf::VideoMode(1920 * screenScalingFactor, 1080 * screenScalingFactor), "Curve :)", sf::Style::Fullscreen);
 	platform.setIcon(window.getSystemHandle());
 
 	CollisionHandler collision_handler = CollisionHandler();
@@ -32,6 +32,8 @@ int main()
 
 	players.push_back(Player(window, &bar1, 1, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::W, sf::Keyboard::S, PURPLE, &collision_handler));
 	players.push_back(Player(window, &bar2, 2, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::Left, sf::Keyboard::Right, sf::Keyboard::Up, sf::Keyboard::Down, CYAN, &collision_handler));
+	//players.push_back(Player(window, &bar3, 3, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::A, sf::Keyboard::D, sf::Keyboard::W, sf::Keyboard::S, PURPLE, &collision_handler));
+	//players.push_back(Player(window, &bar4, 4, linear_speed, angular_speed, r, min_time_between_jumps, max_time_between_jumps, jump_duration, sf::Keyboard::Left, sf::Keyboard::Right, sf::Keyboard::Up, sf::Keyboard::Down, CYAN, &collision_handler));
 
 	sf::Event event;
 	float dt;

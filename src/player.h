@@ -31,8 +31,8 @@ private:
 	bool dead_ = false;
 
 	float power_meter_ = 0;
-	float power_drain_per_s_ = 0.25;
-	float power_gain_per_s_ = 0.5;
+	float power_drain_per_s_ = 0.333;
+	float power_gain_per_s_ = 0.05;
 	int power_a_key_;
 	int power_b_key_;
 	bool using_power_a_ = false;
